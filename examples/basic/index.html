@@ -4,20 +4,34 @@
     <meta charset="utf-8">
     <title>A-Frame Super Keyboard - Basic</title>
     <meta name="description" content="Basic example for Super Keyboard."></meta>
-    <script src="https://rawgit.com/aframevr/aframe/c4aa63e/dist/aframe-master.min.js"></script>
+    <!-- script src="https://rawgit.com/aframevr/aframe/c4aa63e/dist/aframe-master.min.js"></script -->
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="../../dist/aframe-super-keyboard.min.js"></script>
+    <script src="https://jsvr.glitch.me/debug-controller.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@1.0.0/dist/aframe-environment-component.min.js"></script>
+    <script>
+      window.setTimeout(() => {
+        console.log('model loaded');
+        // for aframe v0.9+
+        // primaryHand.object3D.visible = true;
+        // secondaryHand.object3D.visible = true;
+        const hand = document.querySelector('#rightHand');
+        hand.getObject3D('mesh').visible = true;
+        // hand.getObject3D('mesh').visible = true;
+      }, 9000);
+    </script>
   </head>
   <body>
-    <a-scene environment="preset: contact; skyColor: #112214; horizonColor: #478d54; ground: hills; groundTexture: checkerboard; groundColor: #4f3e4b; groundColor2: #4d3c47; dressing: none; grid: none">
-      <a-entity id="mouseCursor" cursor="rayOrigin: mouse"></a-entity>
+    <a-scene debug-controller environment="preset: contact; skyColor: #112214; horizonColor: #478d54; ground: hills; groundTexture: checkerboard; groundColor: #4f3e4b; groundColor2: #4d3c47; dressing: none; grid: none">
+      <!-- a-entity id="mouseCursor" cursor="rayOrigin: mouse"></a-entity -->
 
-      <a-entity id="hand" laser-controls="hand: right">
+      <a-entity id="rightHand" laser-controls="hand: right" hand-controls="right" oculus-touch-controls>
         <a-sphere radius="0.03"></a-sphere>
       </a-entity>
+      <a-entity id="leftHand" hand-controls="left" oculus-touch-controls></a-entity>
 
       <!-- Change hand to `#hand` for VR. -->
-      <a-entity id="keyboard" super-keyboard="hand: #mouseCursor; imagePath:../../dist/" position="0 1.076 -0.5" rotation="-30 0 0"></a-entity>
+      <a-entity id="keyboard" super-keyboard="hand: #rightHand; imagePath:../../dist/" position="0 1.076 -0.5" rotation="-30 0 0"></a-entity>
     </a-scene>
 
     <!-- GitHub Corner. -->

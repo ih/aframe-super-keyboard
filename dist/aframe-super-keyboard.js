@@ -107,12 +107,17 @@ AFRAME.registerComponent('super-keyboard', {
     maxLength: {type: 'int', default: 0},
     model: {default: 'basic'},
     show: {default: true},
+    multipleInputs: {default: false},
     value: {type: 'string', default: ''},
     width: {default: 0.8}
   },
 
   init: function () {
     this.el.addEventListener('click', this.click.bind(this));
+    // TODO remove hack, figure out why click is not being triggered
+    document.querySelector('#rightHand').addEventListener('triggerdown', this.click.bind(this));
+    // this.el.addEventListener('triggerdown', this.click.bind(this));
+
     this.changeEventDetail = {};
     this.textInputObject = {};
 
@@ -294,8 +299,13 @@ AFRAME.registerComponent('super-keyboard', {
     if (!this.raycaster) { return; }
     if (!this.focused) { return; }
 
-    intersection = this.raycaster.getIntersection(this.kbImg);
-    if (!intersection) { return; }
+    // const intersectionEl = this.raycaster.intersectedEls.filter((el) => {
+    //   return el === this.kbImg;
+    // });
+    // intersection = this.raycaster.getIntersection(this.kbImg);
+    // if (!intersection) { return; }
+    if (this.raycaster.intersections.length < 1) { return; }
+    intersection = this.raycaster.intersections[0];
 
     var uv = intersection.uv;
     var keys = KEYBOARDS[this.data.model].layout;
@@ -385,6 +395,8 @@ AFRAME.registerComponent('super-keyboard', {
         '[cursor]',
         '[vive-controls]',
         '[tracked-controls]',
+        '[gearvr-controls]',
+        '[oculus-go-controls]',
         '[oculus-touch-controls]',
         '[windows-motion-controls]',
         '[hand-controls]',
@@ -529,12 +541,18 @@ AFRAME.registerComponent('super-keyboard', {
   },
 
   accept: function () {
-    this.el.object3D.visible = false;
-    if (this.hand && this.hand.ownRaycaster) {
-      this.hand.setAttribute('raycaster', {showLine: false, enabled: false});
-    }
     this.el.emit('superkeyboardinput', {value: this.data.value});
-    this.data.show = false;
+    if (this.data.multipleInputs) {
+      this.rawValue = '';
+      this.data.value = '';
+      this.updateTextInput('');
+    } else {
+      this.el.object3D.visible = false;
+      if (this.hand && this.hand.ownRaycaster) {
+        this.hand.setAttribute('raycaster', {showLine: false, enabled: false});
+      }
+      this.data.show = false;
+    }    
   },
 
   dismiss: function () {
