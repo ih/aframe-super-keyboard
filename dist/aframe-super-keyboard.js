@@ -537,6 +537,7 @@ AFRAME.registerComponent('super-keyboard', {
   },
 
   close: function () {
+    this.keyHover = null;
     this.el.object3D.visible = false;
     if (this.hand && this.hand.ownRaycaster) {
       this.hand.setAttribute('raycaster', {showLine: false, enabled: false});
