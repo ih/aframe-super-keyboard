@@ -308,6 +308,9 @@ AFRAME.registerComponent('super-keyboard', {
     intersection = this.raycaster.intersections[0];
 
     var uv = intersection.uv;
+    if (!uv) {
+      return;
+    }
     var keys = KEYBOARDS[this.data.model].layout;
     for (var i = 0; i < keys.length; i++) {
       var k = keys[i];
