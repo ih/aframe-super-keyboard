@@ -484,7 +484,7 @@ AFRAME.registerComponent('super-keyboard', {
     switch (this.keyHover.key) {
       case 'Enter': {
         this.accept();
-        break;
+        return;
       }
       case 'Insert': {
         return;
@@ -537,7 +537,7 @@ AFRAME.registerComponent('super-keyboard', {
   },
 
   close: function () {
-    // this.keyHover = null;
+    this.keyHover = null;
     this.el.object3D.visible = false;
     if (this.hand && this.hand.ownRaycaster) {
       this.hand.setAttribute('raycaster', {showLine: false, enabled: false});
