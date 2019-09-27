@@ -411,11 +411,17 @@ AFRAME.registerComponent('super-keyboard', {
 
   click: function (ev) {
     if (!this.keyHover) { return; }
+    this.updateKeyColorPlane(this.keyHover.key, this.keyPressColor);
+    var self = this;
+    setTimeout(function () {
+      self.updateKeyColorPlane(self.keyHover.key, self.keyHoverColor);
+    }, 100);
+    this.updateCursorPosition();
 
     switch (this.keyHover.key) {
       case 'Enter': {
         this.accept();
-        return;
+        break;
       }
       case 'Insert': {
         return;
@@ -452,12 +458,6 @@ AFRAME.registerComponent('super-keyboard', {
       }
     }
 
-    this.updateKeyColorPlane(this.keyHover.key, this.keyPressColor);
-    var self = this;
-    setTimeout(function () {
-      self.updateKeyColorPlane(self.keyHover.key, self.keyHoverColor);
-    }, 100);
-    this.updateCursorPosition();
   },
 
   open: function () {
